@@ -4,41 +4,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>備忘欄</title>
+    <title>備忘欄 - localStorage</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
         integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <style>
+        a {
+            display: inline-block;
+        }
+
+        .time {
+            font-size: smaller;
+            bottom: 0;
+            color: rgb(250, 145, 8);
+            position: absolute;
+            bottom: 0;
+        }
+    </style>
 </head>
 
 <body>
     <div class="container w-80 border bg-light">
 
         <h3>備忘欄</h3>
-        <input type="text" id="message" placeholder="填寫內容">
-        <input type="button" id="btn" value="加入備忘">
+        <div class="form-group">
+            <input type="text" id="message" class="form-control mb-2" placeholder="填寫內容" autofocus>
+            <input type="button" id="btn" class="btn btn-primary" value="加入備忘">
+        </div>
 
-        <div class="mt-3 mb-2">
-            <ul id="list" class="list-group list-group-flush">
-                <li class="list-group-item list-group-item-primary"> 範例
-                    <span>&nbsp; &nbsp; 11:29:00 ,2020/10/12</span>
-                    <a href="#" class="close" data-num=${i}>&times;</a></li>
+
+        <div class="mt-2">
+            <div class="row">
+                <button id="all" type="button" class="btn btn-outline-success col m-2">全部顯示</button>
+                <button id="notyet" type="button" class="btn btn-outline-success col m-2">未完成</button>
+                <button id="finish" type="button" class="btn btn-outline-success col m-2">已完成</button>
+            </div>
+
+            <ul id="list" class="list-group list-group-flush mt-2 mb-2">
             </ul>
         </div>
 
     </div>
 
-    <style>
-        a {
-            display: inline-block;
-        }
-
-        span {
-            font-size: smaller;
-            display: inline-block;
-            position: absolute;
-            bottom: 0;
-            color: burlywood;
-        }
-    </style>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
@@ -48,82 +54,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
         integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
         crossorigin="anonymous"></script>
-    <script>
-        var message = document.querySelector('#message');
-        var btn = document.querySelector('#btn');
-        var list = document.querySelector('#list');
-        var data = JSON.parse(localStorage.getItem('listData')) || [];
-
-        btn.addEventListener('click', Saving);
-
-        function Saving(e) {
-            e.preventDefault();
-
-            if (message.value == '') {
-                return;
-            }
-            var vueId = Math.floor(Date.now());
-            var now = new Date();
-            var year = now.getFullYear();
-            var month = now.getMonth() + 1;
-            var date = now.getDate();
-            var hour = now.getHours();
-            var minute = now.getMinutes();
-            var second = now.getSeconds();
-
-            var newMessage = {
-                id: vueId,
-                name: message.value,
-                time: `${hour}:${minute}:${second}, ${year}/${month}/${date}`
-            };
-
-            data.push(newMessage);
-
-            record(data);
-
-            Printing(data);
-
-            message.value = '';
-        }
-
-        function record(vau) {                                    //保存
-            localStorage.setItem('listData', JSON.stringify(vau));
-        }
-
-        function Printing(vau) {                                  //輸出呈現
-            var str = '';
-            for (var i = 0; i < vau.length; i++) {
-                str += `<li id=${vau[i].id} class="list-group-item list-group-item-primary"> 
-                ${vau[i].name}<span>&nbsp; &nbsp; ${vau[i].time}</span>
-                <a href="#" class="close" data-num=${i}>&times;</a></li>`
-            }
-            list.innerHTML = str;
-        }
-
-        list.addEventListener('click', Delete);
-
-        function Delete(e) {                                         //刪除
-            e.preventDefault();
-            if (e.target.textContent == '×') {
-                data.splice(e.target.dataset.num, 1);
-                record(data);
-                Printing(data);
-            }
-        }
-
-        message.addEventListener('keyup', function (e) {
-            e.preventDefault();
-            console.log(e.keyCode);
-            if (e.keyCode == 13) {
-                btn.click();
-            }
-        })
-
-
-
-
-
-    </script>
+    <script src="todo.js"></script>
 </body>
 
 </html>
