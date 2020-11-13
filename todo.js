@@ -96,7 +96,7 @@ list.addEventListener('dblclick', contentChange);
 function contentChange(e) {                                 // 修改內容
     console.log(e.target);
     console.log(e.target.className);
-    if (e.target.className === 'content') {
+    if (e.target.className === 'content col') {
         console.log(e.target.parentNode.id);
         let result = prompt('修改內容', e.target.textContent).trim();
         if (result == '') {
